@@ -1,0 +1,316 @@
+# putting # in many line command + /
+# zooming the terminal command + + or - to reduce.
+# command + shift + k to delete the line in vs-code 
+
+## apiVersion:
+## Example:
+# POD: v1
+# Service: v1
+# namespace: v1
+# Secret: v1
+# Replicaset: apps/v1
+# Deployment: apps/v1
+# jobs: batch/v1
+
+## kind:
+## metadata:
+## spec:
+
+# docker --version
+# kubectl version 
+# kind --version
+
+# minikube status
+# kubectl get nodes
+# kubectl get pods
+# kubectl get services
+# kubectl get namespaces
+# kubectl get secrets
+# kubectl get replicasets
+# kubectl get deployments
+# kubectl get jobs
+
+# kube config file location: ~/.kube/config
+
+# two way Imperative commands: based on command line arguments
+# declarative (manifest file): based on yaml file
+
+# to create a pod using imperative command
+
+# kubectl run pod1 --image nginx
+# kubectl get pods
+# kubectl get pods -o wide
+# kubectl describe pod <pod1 / pod name>
+# kubectl delete pod <pod1 / pod name>
+# kubectl run reyaz --image nginx
+# kubectl get pods
+# kubectl logs reyaz
+
+# login inside the pod
+# kubectl exec -it reyaz -- /bin/bash
+# default path for nginx is /usr/share/nginx/html
+
+# if the image is there in the docker hub then it will pull the image and create the pod, if not then it will give an error
+# or else it will create the pod only.
+
+# kubectl run kiranpod --image kiran 
+# kubectl get pods
+# pod will be created but the error will be ErrImagePull
+# kubectl delete pod kiranpod
+# kubectl delete pod reyaz
+# kubectl delete pod hello-minikube-bbcb89c6c-ldk77
+
+# decalarative way to create a pod using yaml file
+# manifest file: info.yaml
+
+# manifest file is a yaml file which contains the desired state 
+# of the object we want to create in the cluster
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+# spec:
+# apps/v1 is the stable API version for Deployment, ReplicaSet, StatefulSet, 
+# DaemonSet, and ControllerRevision resources.
+# depending on K8S object we want to create , there is a correspoding code library
+# we want to use.apiVersion refers to Code Library. apiVersion will help to create
+# the mentioned object.
+
+# example:
+
+# Pod: v1
+# Service: v1
+# namespace: v1
+# Secret: v1
+# Replicaset: apps/v1
+# Deployment: apps/v1
+# jobs: batch/v1
+
+# to get all the versions of the API we can use the command:
+# kubectl api-versions
+
+# admissionregistration.k8s.io/v1
+# apiextensions.k8s.io/v1
+# apiregistration.k8s.io/v1
+# apps/v1
+# authentication.k8s.io/v1
+# authorization.k8s.io/v1
+# autoscaling/v1
+# autoscaling/v2
+# batch/v1
+# certificates.k8s.io/v1
+# coordination.k8s.io/v1
+# discovery.k8s.io/v1
+# events.k8s.io/v1
+# flowcontrol.apiserver.k8s.io/v1
+# networking.k8s.io/v1
+# node.k8s.io/v1
+# policy/v1
+# rbac.authorization.k8s.io/v1
+# resource.k8s.io/v1
+# scheduling.k8s.io/v1
+# storage.k8s.io/v1
+# v1
+
+# apiVersion: 
+# is the code library which we want to use to create the object in the cluster.
+# It is a stable version of the API which we want to use to create the object 
+# in the cluster. It is a mandatory field in the manifest file. It is used to 
+# specify the version of the API which we want to use to create the object in 
+# the cluster.
+
+# what is kind?
+
+# what kind of object we want to create in the cluster. It is a mandatory 
+# field in the manifest file.
+
+# kind: Pod
+# kind: Deployment
+# kind: Service
+# kind: Ingress
+# kind: job
+
+# what is metadata?
+
+# metadata is the information about the object we want to create in the cluster
+# Additional information about the object like name,labels etc.
+# name : the name of the Deployemnt/pod service etc.
+# labels: it is a key value pair which we can use to label the object we want to create 
+# in the cluster. It is used to identify the object we want to create in the cluster. 
+# It is used to group the objects we want to create in the cluster. It is used to select 
+# the objects we want to create in the cluster.
+
+
+# what is spec?
+
+# Contains docker container related info like,image name,environment variables,
+# port mapping etc. How many number os pods (replicas)
+# about container and that should run on which image. On which port it should expose.
+# labeling the entire deployemnt etc.
+
+# Sample manifest file for creating a pod:
+
+# apiVersion: v1
+# kind: Pod -- creating pod object in the cluster
+# metadata:
+#   name: pod1 -- name of the pod which we want to create in the cluster
+#   labels:
+#     app: myapp
+# spec: -- specification of the pod which we want to create in the cluster
+#   containers:
+#   - image: nginx --image name
+#     name: contl -- container name
+#     ports:
+#     - containerPort: 80
+
+
+# to create a pod using manifest file
+# kubectl create -f pod.yaml
+# kubectl get pods
+# kubectl describe pod pod1
+# kubectl delete -f pod.yaml
+
+# if someone delete the pod for high availability then we can use the manifest file 
+# to create the pod again. for this we have repicaset and deployment which will automatically
+# create the pod if it is deleted.
+# this is used for managing multiple pods and to maintain replicas of pod tp perform activities like
+# load balancing and autoscaling.
+# setup minikube with ubuntu 24 as per installation process.
+# it will create replicas of same pod.
+# we can use same application with multiple pods.
+# even if one pod is deleted automatically it will create another pod.it has self healing 
+# mechanism.
+# Depend on requirement we can scale the pods.we create repicaset and then repicaset will 
+# create pods.
+
+# kubectl get pods
+# kubectl get pods -o wide
+# kubectl describe pod <pod name>
+# kubectl logs <pod name>
+# kubectl delete pod <pod name>
+# kubectl get replicasets
+# kubectl create -f pod1.yaml
+# kubectl get replicasets
+# kubectl get pods
+# kubectl describe replicaset <replicaset name>
+# kubectl describe pod <pod name>
+# kubectl delete -f pod1.yaml
+# kubectl get pods --show-labels
+
+# to see the pod deleted live in new terminal
+# kubectl get pods --watch
+# kubectl scale replicaset ib-rs --replicas=5 (foe scale in) reduces the number to 4.
+# kubectl get pods
+# kubectl get replicasets
+
+# kubectl edit replicaset <replicaset name>
+# it will open the manifest file in the editor and we can change the number of replicas and
+# save the file and it will automatically update the number of replicas in the cluster.
+
+# pod donot replicaSet.
+# with repicaset we cannot role-out repicaSet. for roll out and in use apply command.
+# kubectl apply -f pod1.yaml
+# it will create the replicaset if it is not there and if it is there then it
+# will update the replicaset if there is any change in the manifest file.
+# kubectl decribe pod | grep -i ID
+# we canot rollout in replicaSet so we go deployments.
+
+# kubectl scale deploy/<deployment‑name> --replicas=0
+# kubectl delete deploy/<deployment‑name>
+# kubectl delete pod -l app=<label‑selector>
+# kubectl apply -f deployment.yaml
+
+# difference between replicaSet and deployment:
+# replicaSet is used to maintain the desired number of replicas of a pod in the cluster.
+# deployment is used to manage the replicaSet and it provides features like rolling 
+# update, rollback etc.
+# with deployment we can do roll out and roll back but with replicaSet we cannot do roll 
+# out and roll back. 
+
+# kubectl describe pod | grep -i ID
+# kubectl edit deploy/<deployment name>
+# # delete all pods with label app=web
+# kubectl delete pod -l app=web
+
+# # use a field selector (e.g. all pods in namespace “test” not Running)
+# kubectl delete pod --field-selector=status.phase!=Running
+
+# # delete by name prefix (shell expansion)
+# kubectl delete pod web-{1..5}
+
+# # combine with grep/awk for ad‑hoc lists
+# kubectl get pods -o name | grep '^pod/web-' | xargs kubectl delete
+# kubectl rollout undo deploy/ib-deploy
+# kubectl rollout status deploy/ib-deploy
+# kubectl rollout history deploy/ib-deploy
+
+# rolling update: it is a process of updating the application without downtime. 
+# It is a process of updating the application without affecting the availability 
+# of the application. Deleting the old pod and creating new pod with new image. 
+# It is a process of updating the application without affecting the user experience. 
+# It is a process of updating the application  without affecting the performance of
+# the application. 
+# It is a process of updating the application without affecting the user experience.
+# It is a process of updating the application without affecting the performance of 
+#the application.
+
+# Recreate: Delete all pods and create again-Downtime. Not Recommended.
+
+# Blue-Green Deployment: Two identical environments, one active (blue) and one idle (green). Switch traffic to green 
+# after testing. Minimal downtime. Done manually or with tools.
+
+# Canary Deployment: Gradually roll out changes to a small subset of users before full deployment. 
+# Monitor performance and rollback if issues arise. Requires traffic routing capabilities.
+
+# RollOut few commands
+
+# kubectl rollout history deploy/ib-deployment
+# kubectl rollout undo deploy/ib-deployment < it will go back to privious appl./image>
+# kubectl get pods
+# kubectl describe pods | grep -i image
+# kubectl rollout pause deploy/ib-deployment <it is like lock,cannot undo,cannot rollout to privious>
+# kubectl rollout undo deploy/ib-deployment < not possible>
+# kubectl rollout resume deploy/ib-deployment 
+# kubectl rollout undo deploy/ib-deployment < now possible>
+# kubectl rollout status deploy/ib-deployment
+
+# blue green deployment: done in EC2 / BEANSTACK / RDS.
+# containerPort: 8080 <Port inside the container>
+# hostport: 8080 <Port on the host machine>
+
+# kubectl apply -f test.yaml or
+# kubectl create -f test.yaml
+# kubectl get pods
+# kubectl describe pod two-container-pod
+# kubectl logs two-container-pod -c nginx-container
+# kubectl logs two-container-pod -c busybox-container
+# kubectl exec -it two-container-pod -c busybox-container -- /bin/sh    
+
+# kubernetes Jobs: it is a resource in Kubernetes which is used to run a batch job. 
+# they ensure that a specified number of pods successfully complete a task before
+# marking the job as complete/done. such as data migration, backup,or batch processing.
+# non-parallel jobs: run a single pod to completion.
+
+# completions: 3 means that the job will run until 3 successful completions
+# of the pod. parallel jobs: run multiple pods in parallel to complete the 
+#job faster.
+
+# restartPolicy: Never means that the pod will not be restarted if it fails.Use case Jobs/CronJobs one-time execution.
+# OnFailure means that the pod will be restarted if it fails. Always means that 
+# the pod will be restarted regardless of the exit status. use case Jobs & CronJobs  
+# Always is not recommended for jobs because it can lead to infinite loops 
+# if the job fails repeatedly.use case Default for Deployments & ReplicaSets.
+
+# completions: 3 means that the job will run until 3 successful completions 
+# of the pod.
+# parallelism: 2 means that the job will run 2 pods in parallel to complete 
+# the job faster. If parallelism is not specified, it defaults to 1, meaning 
+# that the job will run one pod at a time until the specified number of 
+# completions is reached. If parallelism is greater than the number of 
+# completions, the job will run all pods in parallel until the
+
+# 57:15
+
+
+
+
